@@ -40,7 +40,12 @@ struct TextFragment<Content: AttributedStringProtocol>: View {
       TextBuilder($0, environment: textEnvironment)
     }
 
-    textBuilder.text
+    let text =
+      textBuilder.accessibilityLabel.map {
+        textBuilder.text.accessibilityLabel(Text(verbatim: $0))
+      } ?? textBuilder.text
+
+    text
       .customAttribute(TextFragmentAttribute())
       .onGeometryChange(for: CGSize?.self, of: \.textContainerSize) { size in
         guard let size else { return }
